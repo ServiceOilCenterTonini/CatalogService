@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tonin's Oil Service Berat | Executive Service Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg-dark: #090b0e;
+      --bg-card: rgba(18, 22, 30, 0.88);
+      --bg-card-hover: rgba(26, 31, 44, 0.95);
+      --bg-modal: #121620;
+      --accent-gold: #d4af37;
+      --accent-gold-glow: rgba(212, 175, 55, 0.3);
+      --accent-red: #ff2a3f;
+      --accent-cyan: #00f0ff;
+      --text-light: #f1f5f9;
+      --text-muted: #94a3b8;
+      --border-color: rgba(255, 255, 255, 0.1);
+      --border-gold: rgba(212, 175, 55, 0.5);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      /* EXCLUSIVE GARAGE BACKGROUND: GRAY WALLS, LED LIGHTING, RED LIFT & BMW M5 CS */
+      background-image: 
+        linear-gradient(180deg, rgba(9, 11, 14, 0.82) 0%, rgba(9, 11, 14, 0.93) 100%),
+        url('https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=2000&q=80');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    /* TOP SPONSOR BAR (OIL BRANDS) */
+    .sponsor-bar {
+      background: linear-gradient(90deg, #050608, #11151e, #050608);
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+    }
+
+    .sponsor-title {
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    .sponsors-logos {
+      display: flex;
+      gap: 22px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .sponsor-badge {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      font-style: italic;
+      padding: 4px 10px;
+      border-radius: 4px;
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.05);
+      transition: all 0.3s;
+    }
+
+    .sponsor-badge:hover { transform: scale(1.05); }
+    .valvoline { color: #00529b; text-shadow: 0 0 10px rgba(0,82,155,0.6); }
+    .valvoline span { color: #e31b23; }
+    .castrol { color: #008751; text-shadow: 0 0 10px rgba(0,135,81,0.6); }
+    .castrol span { color: #ee3124; }
+    .mobil { color: #002b66; text-shadow: 0 0 10px rgba(0,43,102,0.6); }
+    .mobil span { color: #d8232a; }
+    .shell { color: #ffd500; text-shadow: 0 0 10px rgba(255,213,0,0.5); }
+    .shell span { color: #dd1d21; }
+
+    /* HEADER & BRANDING */
+    header {
+      padding: 30px 5% 15px 5%;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .brand-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .shop-logo {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.9rem;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #ffffff 20%, var(--accent-gold) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .wrench-icon {
+      font-size: 1.8rem;
+      -webkit-text-fill-color: initial;
+      filter: drop-shadow(0 0 8px var(--accent-gold-glow));
+    }
+
+    .location-tag {
+      font-size: 0.8rem;
+      color: var(--accent-cyan);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+
+    /* CONTROLS BAR */
+    .controls-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      background: rgba(18, 22, 30, 0.75);
+      backdrop-filter: blur(12px);
+      padding: 16px 22px;
+      border-radius: 14px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+      flex-wrap: wrap;
+    }
+
+    .btn-add-car {
+      background: linear-gradient(135deg, var(--accent-gold), #b89228);
+      color: #000;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 800;
+      font-size: 0.85rem;
+      letter-spacing: 1.5px;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 0 18px var(--accent-gold-glow);
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-add-car:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 28px rgba(212, 175, 55, 0.6);
+    }
+
+    .filter-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* GOOGLE-LIKE AUTOCOMPLETE SEARCH WRAPPER */
+    .search-wrapper {
+      position: relative;
+      width: 300px;
+    }
+
+    select, input {
+      background-color: rgba(10, 11, 14, 0.9);
+      border: 1px solid var(--border-color);
+      color: var(--text-light);
+      padding: 11px 16px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      width: 100%;
+    }
+
+    select:focus, input:focus {
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 10px var(--accent-gold-glow);
+    }
+
+    /* AUTOCOMPLETE DROPDOWN */
+    .suggestions-dropdown {
+      position: absolute;
+      top: 105%;
+      left: 0;
+      width: 100%;
+      background: var(--bg-modal);
+      border: 1px solid var(--border-gold);
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+      z-index: 100;
+      max-height: 220px;
+      overflow-y: auto;
+      display: none;
+    }
+
+    .suggestion-item {
+      padding: 10px 14px;
+      cursor: pointer;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      font-size: 0.85rem;
+      transition: background 0.2s;
+    }
+
+    .suggestion-item:hover {
+      background: rgba(212, 175, 55, 0.15);
+      color: var(--accent-gold);
+    }
+
+    /* MAIN CONTENT AREA */
+    main {
+      padding: 20px 5% 60px 5%;
+      flex: 1;
+    }
+
+    .section-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      margin-bottom: 22px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, var(--border-color), transparent);
+    }
+
+    .cars-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 25px;
+    }
+
+    /* CAR CARD */
+    .car-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 22px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .car-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(180deg, var(--accent-gold), var(--accent-red));
+    }
+
+    .car-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--border-gold);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 35px rgba(0,0,0,0.6);
+    }
+
+    .car-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 8px;
+    }
+
+    .car-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .car-year {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      color: var(--accent-gold);
+      font-weight: 600;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+    }
+
+    .card-badges {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+
+    .license-plate-badge {
+      background: #1e2330;
+      border: 1px solid #3a4256;
+      color: #fff;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 6px;
+      letter-spacing: 2px;
+      font-size: 0.85rem;
+    }
+
+    .last-serviced-badge {
+      background: rgba(230, 57, 70, 0.15);
+      border: 1px solid rgba(230, 57, 70, 0.4);
+      color: var(--accent-red);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 5px 10px;
+      border-radius: 6px;
+    }
+
+    .car-specs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 16px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .spec-item span {
+      display: block;
+      color: var(--text-light);
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    .notes-preview {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      background: rgba(0,0,0,0.3);
+      padding: 10px;
+      border-radius: 6px;
+      margin-bottom: 18px;
+      border-left: 2px solid var(--accent-gold);
+      font-style: italic;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .btn-action {
+      flex: 1;
+      padding: 9px;
+      border-radius: 6px;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 0.78rem;
+      transition: all 0.3s;
+      text-align: center;
+      border: 1px solid transparent;
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    .btn-history {
+      border-color: var(--accent-gold);
+      color: var(--accent-gold);
+      background: transparent;
+    }
+
+    .btn-history:hover {
+      background: var(--accent-gold);
+      color: #000;
+    }
+
+    .btn-add-service-direct {
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+      background: transparent;
+    }
+
+    .btn-add-service-direct:hover {
+      background: var(--accent-cyan);
+      color: #000;
+    }
+
+    .btn-delete {
+      background: transparent;
+      border: 1px solid rgba(255, 42, 63, 0.3);
+      color: var(--accent-red);
+      padding: 9px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .btn-delete:hover {
+      background: var(--accent-red);
+      color: #fff;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+      grid-column: 1 / -1;
+    }
+
+    /* MODAL STYLES */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.88);
+      backdrop-filter: blur(10px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .modal {
+      background: var(--bg-modal);
+      border: 1px solid var(--border-gold);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 680px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 30px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 15px;
+    }
+
+    .modal-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.3rem;
+      color: var(--accent-gold);
+    }
+
+    .close-modal {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+
+    .close-modal:hover { color: #fff; }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    textarea {
+      background-color: rgba(10, 11, 14, 0.9);
+      border: 1px solid var(--border-color);
+      color: var(--text-light);
+      padding: 12px;
+      border-radius: 8px;
+      min-height: 80px;
+      resize: vertical;
+      outline: none;
+    }
+
+    textarea:focus { border-color: var(--accent-gold); }
+
+    .date-inputs-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.2fr;
+      gap: 10px;
+    }
+
+    .btn-submit {
+      background: linear-gradient(135deg, var(--accent-gold), #b89228);
+      color: #000;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 800;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 20px;
+      font-size: 0.95rem;
+      letter-spacing: 1px;
+    }
+
+    .btn-submit:hover { opacity: 0.9; }
+
+    /* SERVICE HISTORY LIST */
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 25px;
+    }
+
+    .history-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      padding: 15px;
+      border-radius: 8px;
+    }
+
+    .history-item-header {
+      display: flex;
+      justify-content: space-between;
+      color: var(--accent-gold);
+      font-size: 0.85rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .history-item-desc {
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP OIL BRAND SPONSOR BAR -->
+  <div class="sponsor-bar">
+    <div class="sponsor-title">Authorized Lubricants & Oil Service Center</div>
+    <div class="sponsors-logos">
+      <div class="sponsor-badge valvoline">Valvoline<span>V</span></div>
+      <div class="sponsor-badge castrol">Castrol<span>GTX</span></div>
+      <div class="sponsor-badge mobil">Mobil <span>1</span></div>
+      <div class="sponsor-badge shell">Shell <span>Helix Ultra</span></div>
+    </div>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="brand-header">
+      <div>
+        <div class="shop-logo">
+          TONIN'S OIL SERVICE <span class="wrench-icon">🔧</span>
+        </div>
+        <div class="location-tag">BERAT EXECUTIVE AUTOMOTIVE CARE</div>
+      </div>
+    </div>
+
+    <!-- CONTROLS BAR -->
+    <div class="controls-bar">
+      <!-- TOP LEFT: ADD CAR BUTTON -->
+      <button class="btn-add-car" onclick="openAddCarModal()">
+        + ADD CAR
+      </button>
+
+      <!-- TOP MIDDLE: DYNAMIC BRAND SORT FILTER -->
+      <div class="filter-container">
+        <label for="brandFilter">Sort Brand:</label>
+        <select id="brandFilter" onchange="filterCars()">
+          <option value="ALL">All Makes</option>
+        </select>
+      </div>
+
+      <!-- TOP RIGHT: GOOGLE-LIKE AUTOCOMPLETE SEARCH -->
+      <div class="search-wrapper">
+        <input 
+          type="text" 
+          id="searchInput" 
+          placeholder="Search License Plate or VIN..." 
+          oninput="handleSearchInput()"
+          autocomplete="off"
+        />
+        <div id="suggestionsBox" class="suggestions-dropdown"></div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CAR FLEET REGISTRY -->
+  <main>
+    <div class="section-title">Serviced Fleet Registry</div>
+    <div class="cars-grid" id="carsGrid">
+      <!-- Dynamic Car Cards -->
+    </div>
+  </main>
+
+  <!-- ADD CAR MODAL -->
+  <div class="modal-overlay" id="addCarModal">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title">Register Serviced Vehicle</div>
+        <button class="close-modal" onclick="closeAddCarModal()">&times;</button>
+      </div>
+      <form id="addCarForm" onsubmit="saveCar(event)">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Make / Type *</label>
+            <input type="text" id="carMake" placeholder="e.g. BMW, Mercedes-Benz, Porsche, VW, Fiat" required />
+          </div>
+          <div class="form-group">
+            <label>Model *</label>
+            <input type="text" id="carModel" placeholder="e.g. M5 CS, 911 GT3, Golf R" required />
+          </div>
+          <div class="form-group">
+            <label>Vehicle Year *</label>
+            <input type="number" id="carYear" placeholder="e.g. 2022" required />
+          </div>
+          <div class="form-group">
+            <label>License Plate *</label>
+            <input type="text" id="carPlate" placeholder="e.g. AB 123 CD" required />
+          </div>
+          <div class="form-group">
+            <label>VIN Number *</label>
+            <input type="text" id="carVin" placeholder="17-Digit VIN" required />
+          </div>
+          <div class="form-group">
+            <label>Engine *</label>
+            <input type="text" id="carEngine" placeholder="e.g. 4.4L V8 TwinTurbo, 2.0 TDI" required />
+          </div>
+          <div class="form-group">
+            <label>Power (kW)</label>
+            <input type="number" id="carKw" placeholder="e.g. 467" />
+          </div>
+          <div class="form-group">
+            <label>Kilometers (km) *</label>
+            <input type="number" id="carKm" placeholder="e.g. 42000" required />
+          </div>
+
+          <!-- SERVICE DATE FIELDS (DAY / MONTH / YEAR) -->
+          <div class="form-group full-width">
+            <label>Service Date (Day / Month / Year) *</label>
+            <div class="date-inputs-group">
+              <input type="number" id="carDay" placeholder="Day (DD)" min="1" max="31" required />
+              <input type="number" id="carMonth" placeholder="Month (MM)" min="1" max="12" required />
+              <input type="number" id="carServiceYear" placeholder="Year (YYYY)" min="1990" max="2030" required />
+            </div>
+          </div>
+
+          <div class="form-group full-width">
+            <label>Vehicle Notes / Oil Specs</label>
+            <textarea id="carNotes" placeholder="e.g. Shell Helix Ultra 0W-40, ceramic brakes, oil filter changed..."></textarea>
+          </div>
+        </div>
+        <button type="submit" class="btn-submit">SAVE VEHICLE TO FLEET</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- SERVICE HISTORY & ADD SERVICE MODAL -->
+  <div class="modal-overlay" id="serviceHistoryModal">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title" id="historyModalTitle">Car Service History</div>
+        <button class="close-modal" onclick="closeHistoryModal()">&times;</button>
+      </div>
+      
+      <div class="history-list" id="historyList">
+        <!-- Service logs rendered dynamically -->
+      </div>
+
+      <div class="section-title">Log New Service Work</div>
+      <form id="addServiceForm" onsubmit="saveServiceRecord(event)">
+        <input type="hidden" id="activeCarId" />
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Service Date</label>
+            <input type="date" id="serviceDate" required />
+          </div>
+          <div class="form-group">
+            <label>Kilometers at Service</label>
+            <input type="number" id="serviceKm" placeholder="e.g. 50000" required />
+          </div>
+          <div class="form-group full-width">
+            <label>Work Performed & Fluid Replaced</label>
+            <textarea id="serviceDesc" placeholder="e.g. Oil change with Castrol Edge 5W-30, air filter, spark plugs..." required></textarea>
+          </div>
+        </div>
+        <button type="submit" class="btn-submit">+ LOG NEW SERVICE</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // INITIALIZE LOCAL STORAGE
+    let cars = JSON.parse(localStorage.getItem('tonin_cars_db')) || [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      updateBrandFilterDropdown();
+      renderCars(cars);
+      document.getElementById('serviceDate').valueAsDate = new Date();
+
+      // Close autocomplete dropdown when clicking outside
+      document.addEventListener('click', (e) => {
+        if (!e.target.closest('.search-wrapper')) {
+          document.getElementById('suggestionsBox').style.display = 'none';
+        }
+      });
+    });
+
+    // SAVE NEW CAR
+    function saveCar(e) {
+      e.preventDefault();
+
+      const day = String(document.getElementById('carDay').value).padStart(2, '0');
+      const month = String(document.getElementById('carMonth').value).padStart(2, '0');
+      const year = document.getElementById('carServiceYear').value;
+      const formattedDate = `${day}/${month}/${year}`;
+
+      const newCar = {
+        id: Date.now().toString(),
+        make: document.getElementById('carMake').value.trim(),
+        model: document.getElementById('carModel').value.trim(),
+        year: document.getElementById('carYear').value,
+        plate: document.getElementById('carPlate').value.trim().toUpperCase(),
+        vin: document.getElementById('carVin').value.trim().toUpperCase(),
+        engine: document.getElementById('carEngine').value.trim(),
+        kw: document.getElementById('carKw').value || 'N/A',
+        km: document.getElementById('carKm').value,
+        notes: document.getElementById('carNotes').value.trim() || 'No specific notes recorded.',
+        initialServiceDate: formattedDate,
+        initialServiceYear: year,
+        serviceHistory: [
+          {
+            date: formattedDate,
+            km: document.getElementById('carKm').value,
+            desc: "Initial vehicle registration service."
+          }
+        ]
+      };
+
+      cars.push(newCar);
+      saveToStorage();
+      
+      updateBrandFilterDropdown();
+      filterCars();
+      
+      document.getElementById('addCarForm').reset();
+      closeAddCarModal();
+    }
+
+    // GET LAST SERVICED YEAR FOR DISPLAY ON CARD FACE
+    function getLastServicedYear(car) {
+      if (car.serviceHistory && car.serviceHistory.length > 0) {
+        const lastEntry = car.serviceHistory[car.serviceHistory.length - 1];
+        if (lastEntry.date) {
+          const parts = lastEntry.date.split('/');
+          if (parts.length === 3) return parts[2]; // Return YYYY from DD/MM/YYYY
+          const dashParts = lastEntry.date.split('-');
+          if (dashParts.length === 3) return dashParts[0]; // Return YYYY from YYYY-MM-DD
+        }
+      }
+      return car.initialServiceYear || car.year;
+    }
+
+    // DELETE CAR
+    function deleteCar(carId) {
+      if (confirm('Are you sure you want to remove this car and all history?')) {
+        cars = cars.filter(car => car.id !== carId);
+        saveToStorage();
+        updateBrandFilterDropdown();
+        filterCars();
+      }
+    }
+
+    // AUTO-POPULATE DYNAMIC BRAND FILTER DROPDOWN
+    function updateBrandFilterDropdown() {
+      const brandFilter = document.getElementById('brandFilter');
+      const selectedValue = brandFilter.value;
+      
+      const uniqueMakes = [...new Set(cars.map(c => c.make.toUpperCase()))].sort();
+
+      brandFilter.innerHTML = '<option value="ALL">All Makes</option>';
+      uniqueMakes.forEach(make => {
+        const opt = document.createElement('option');
+        opt.value = make;
+        opt.textContent = make;
+        brandFilter.appendChild(opt);
+      });
+
+      if (uniqueMakes.includes(selectedValue)) {
+        brandFilter.value = selectedValue;
+      }
+    }
+
+    // GOOGLE-STYLE AUTOCOMPLETE SEARCH FOR VIN & PLATE
+    function handleSearchInput() {
+      const query = document.getElementById('searchInput').value.trim().toUpperCase();
+      const box = document.getElementById('suggestionsBox');
+      box.innerHTML = '';
+
+      if (query.length < 1) {
+        box.style.display = 'none';
+        filterCars();
+        return;
+      }
+
+      // Find matching cars by VIN or License Plate
+      const matches = cars.filter(c => c.vin.includes(query) || c.plate.includes(query));
+
+      if (matches.length > 0) {
+        matches.forEach(car => {
+          const item = document.createElement('div');
+          item.className = 'suggestion-item';
+          item.innerHTML = `<strong>${car.plate}</strong> <span style="color:var(--text-muted)">| VIN: ${car.vin} (${car.make} ${car.model})</span>`;
+          item.onclick = () => {
+            document.getElementById('searchInput').value = car.vin;
+            box.style.display = 'none';
+            filterCars();
+          };
+          box.appendChild(item);
+        });
+        box.style.display = 'block';
+      } else {
+        box.style.display = 'none';
+      }
+
+      filterCars();
+    }
+
+    // FILTER CARS BY BRAND & SEARCH
+    function filterCars() {
+      const selectedBrand = document.getElementById('brandFilter').value;
+      const searchQuery = document.getElementById('searchInput').value.trim().toUpperCase();
+
+      const filtered = cars.filter(car => {
+        const matchesBrand = (selectedBrand === 'ALL') || (car.make.toUpperCase() === selectedBrand);
+        const matchesSearch = car.plate.includes(searchQuery) || car.vin.includes(searchQuery);
+        return matchesBrand && matchesSearch;
+      });
+
+      renderCars(filtered);
+    }
+
+    // RENDER CAR CARDS ON FLEET REGISTRY
+    function renderCars(carsToRender) {
+      const grid = document.getElementById('carsGrid');
+      grid.innerHTML = '';
+
+      if (carsToRender.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state">
+            <h3>No vehicles found</h3>
+            <p>Click "+ ADD CAR" on the top left to register a new vehicle.</p>
+          </div>
+        `;
+        return;
+      }
+
+      carsToRender.forEach(car => {
+        const lastYear = getLastServicedYear(car);
+        const card = document.createElement('div');
+        card.className = 'car-card';
+        card.innerHTML = `
+          <div>
+            <div class="car-card-header">
+              <div class="car-title">${car.make} ${car.model}</div>
+              <div class="car-year">${car.year}</div>
+            </div>
+            
+            <div class="card-badges">
+              <div class="license-plate-badge">${car.plate}</div>
+              <div class="last-serviced-badge">LAST SERVICED: ${lastYear}</div>
+            </div>
+            
+            <div class="car-specs">
+              <div class="spec-item">VIN <span>${car.vin}</span></div>
+              <div class="spec-item">Engine <span>${car.engine}</span></div>
+              <div class="spec-item">Power <span>${car.kw} kW</span></div>
+              <div class="spec-item">Mileage <span>${Number(car.km).toLocaleString()} km</span></div>
+            </div>
+
+            <div class="notes-preview">
+              "${car.notes}"
+            </div>
+          </div>
+
+          <div class="card-actions">
+            <button class="btn-action btn-history" onclick="openHistoryModal('${car.id}')">
+              HISTORY (${car.serviceHistory.length})
+            </button>
+            <button class="btn-action btn-add-service-direct" onclick="openDirectAddService('${car.id}')">
+              + ADD SERVICE
+            </button>
+            <button class="btn-delete" onclick="deleteCar('${car.id}')" title="Delete Car">&times;</button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    // OPEN HISTORY MODAL
+    function openHistoryModal(carId) {
+      const car = cars.find(c => c.id === carId);
+      if (!car) return;
+
+      document.getElementById('activeCarId').value = car.id;
+      document.getElementById('historyModalTitle').textContent = `${car.make} ${car.model} (${car.plate}) - Service History`;
+      
+      renderServiceHistory(car);
+      document.getElementById('serviceHistoryModal').style.display = 'flex';
+    }
+
+    // DIRECT ADD SERVICE BUTTON (Opens modal focused on adding a record)
+    function openDirectAddService(carId) {
+      openHistoryModal(carId);
+      setTimeout(() => {
+        document.getElementById('serviceKm').focus();
+      }, 100);
+    }
+
+    function renderServiceHistory(car) {
+      const historyList = document.getElementById('historyList');
+      historyList.innerHTML = '';
+
+      if (car.serviceHistory.length === 0) {
+        historyList.innerHTML = '<p style="color: var(--text-muted); font-size: 0.9rem;">No service history logged yet.</p>';
+        return;
+      }
+
+      const sorted = [...car.serviceHistory].reverse();
+      sorted.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'history-item';
+        div.innerHTML = `
+          <div class="history-item-header">
+            <span>DATE: ${item.date}</span>
+            <span>MILEAGE: ${Number(item.km).toLocaleString()} KM</span>
+          </div>
+          <div class="history-item-desc">${item.desc}</div>
+        `;
+        historyList.appendChild(div);
+      });
+    }
+
+    // LOG NEW SERVICE RECORD
+    function saveServiceRecord(e) {
+      e.preventDefault();
+      const carId = document.getElementById('activeCarId').value;
+      const car = cars.find(c => c.id === carId);
+
+      if (car) {
+        const rawDate = document.getElementById('serviceDate').value;
+        // Format YYYY-MM-DD to DD/MM/YYYY
+        const d = new Date(rawDate);
+        const day = String(d.getDate()).padStart(2, '0');
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const year = d.getFullYear();
+        const formattedDate = `${day}/${month}/${year}`;
+
+        const newRecord = {
+          date: formattedDate,
+          km: document.getElementById('serviceKm').value,
+          desc: document.getElementById('serviceDesc').value.trim()
+        };
+
+        car.serviceHistory.push(newRecord);
+
+        // Auto-update car's current mileage if new service is higher
+        if (Number(newRecord.km) > Number(car.km)) {
+          car.km = newRecord.km;
+        }
+
+        saveToStorage();
+        renderServiceHistory(car);
+        filterCars(); 
+        document.getElementById('serviceDesc').value = '';
+        document.getElementById('serviceKm').value = '';
+      }
+    }
+
+    // MODAL CONTROLS
+    function openAddCarModal() {
+      // Set today's date in day/month/year inputs as default
+      const now = new Date();
+      document.getElementById('carDay').value = String(now.getDate()).padStart(2, '0');
+      document.getElementById('carMonth').value = String(now.getMonth() + 1).padStart(2, '0');
+      document.getElementById('carServiceYear').value = now.getFullYear();
+
+      document.getElementById('addCarModal').style.display = 'flex';
+    }
+
+    function closeAddCarModal() {
+      document.getElementById('addCarModal').style.display = 'none';
+    }
+
+    function closeHistoryModal() {
+      document.getElementById('serviceHistoryModal').style.display = 'none';
+    }
+
+    function saveToStorage() {
+      localStorage.setItem('tonin_cars_db', JSON.stringify(cars));
+    }
+  </script>
+</body>
+</html>
