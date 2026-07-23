@@ -8,9 +8,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
   
-  <!-- SUPABASE LIBRARY -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <style>
     :root {
       --bg-dark: #090b0e;
@@ -589,7 +586,7 @@
 
   <!-- TOP OIL BRAND SPONSOR BAR -->
   <div class="sponsor-bar">
-    <div class="sponsor-title">Authorized Lubricants & Oil Service Center</div>
+    <div class="sponsor-title">Authorized Lubricants &amp; Oil Service Center</div>
     <div class="sponsors-logos">
       <div class="sponsor-badge valvoline">Valvoline<span>V</span></div>
       <div class="sponsor-badge castrol">Castrol<span>GTX</span></div>
@@ -611,26 +608,21 @@
 
     <!-- CONTROLS BAR -->
     <div class="controls-bar">
+      <!-- TOP LEFT: ADD CAR BUTTON -->
       <button class="btn-add-car" onclick="openAddCarModal()">
         + ADD CAR
       </button>
 
+      <!-- TOP MIDDLE: DYNAMIC BRAND SORT FILTER -->
       <div class="filter-container">
         <label for="brandFilter">Sort Brand:</label>
-        <select id="brandFilter" onchange="filterCars()">
-          <option value="ALL">All Makes</option>
-        </select>
+        <select id="brandFilter" onchange="filterCars()"><option value="ALL">All Makes</option></select>
       </div>
 
+      <!-- TOP RIGHT: GOOGLE-LIKE AUTOCOMPLETE SEARCH -->
       <div class="search-wrapper">
-        <input 
-          type="text" 
-          id="searchInput" 
-          placeholder="Search License Plate or VIN..." 
-          oninput="handleSearchInput()"
-          autocomplete="off"
-        />
-        <div id="suggestionsBox" class="suggestions-dropdown"></div>
+        <input type="text" id="searchInput" placeholder="Search License Plate or VIN..." oninput="handleSearchInput()" autocomplete="off">
+        <div id="suggestionsBox" class="suggestions-dropdown" style="display: none;"></div>
       </div>
     </div>
   </header>
@@ -639,58 +631,62 @@
   <main>
     <div class="section-title">Serviced Fleet Registry</div>
     <div class="cars-grid" id="carsGrid">
-      <div class="empty-state">Loading vehicles from database...</div>
+      <div class="empty-state">
+        <h3>No vehicles found</h3>
+        <p>Click "+ ADD CAR" on the top left to register a new vehicle.</p>
+      </div>
     </div>
   </main>
 
   <!-- ADD CAR MODAL -->
-  <div class="modal-overlay" id="addCarModal">
+  <div class="modal-overlay" id="addCarModal" style="display: none;">
     <div class="modal">
       <div class="modal-header">
         <div class="modal-title">Register Serviced Vehicle</div>
-        <button class="close-modal" onclick="closeAddCarModal()">&times;</button>
+        <button class="close-modal" onclick="closeAddCarModal()">×</button>
       </div>
       <form id="addCarForm" onsubmit="saveCar(event)">
         <div class="form-grid">
           <div class="form-group">
             <label>Make / Type *</label>
-            <input type="text" id="carMake" placeholder="e.g. BMW, Mercedes-Benz, Porsche, VW, Fiat" required />
+            <input type="text" id="carMake" placeholder="e.g. BMW, Mercedes-Benz, Porsche, VW, Fiat" required="">
           </div>
           <div class="form-group">
             <label>Model *</label>
-            <input type="text" id="carModel" placeholder="e.g. M5 CS, 911 GT3, Golf R" required />
+            <input type="text" id="carModel" placeholder="e.g. M5 CS, 911 GT3, Golf R" required="">
           </div>
           <div class="form-group">
             <label>Vehicle Year *</label>
-            <input type="number" id="carYear" placeholder="e.g. 2022" required />
+            <input type="number" id="carYear" placeholder="e.g. 2022" required="">
           </div>
           <div class="form-group">
             <label>License Plate *</label>
-            <input type="text" id="carPlate" placeholder="e.g. AB 123 CD" required />
+            <input type="text" id="carPlate" placeholder="e.g. AB 123 CD" required="">
           </div>
           <div class="form-group">
             <label>VIN Number *</label>
-            <input type="text" id="carVin" placeholder="17-Digit VIN" required />
+            <input type="text" id="carVin" placeholder="17-Digit VIN" required="">
           </div>
           <div class="form-group">
             <label>Engine *</label>
-            <input type="text" id="carEngine" placeholder="e.g. 4.4L V8 TwinTurbo, 2.0 TDI" required />
+            <input type="text" id="carEngine" placeholder="e.g. 4.4L V8 TwinTurbo, 2.0 TDI" required="">
           </div>
           <div class="form-group">
             <label>Power (kW)</label>
-            <input type="number" id="carKw" placeholder="e.g. 467" />
+            <input type="number" id="carKw" placeholder="e.g. 467">
           </div>
           <div class="form-group">
             <label>Kilometers (km) *</label>
-            <input type="number" id="carKm" placeholder="e.g. 42000" required />
+            <input type="number" id="carKm" placeholder="e.g. 42000" required="">
           </div>
 
+          <!-- SERVICE DATE FIELDS (DAY / MONTH / YEAR) -->
           <div class="form-group full-width">
             <label>Service Date (Day / Month / Year) *</label>
             <div class="date-inputs-group">
-              <input type="number" id="carDay" placeholder="Day (DD)" min="1" max="31" required />
-              <input type="number" id="carMonth" placeholder="Month (MM)" min="1" max="12" required />
-              <input type="number" id="carServiceYear" placeholder="Year (YYYY)" min="1990" max="2030" required />
+              <input type="number" id="carDay" placeholder="Day (DD)" min="1" max="31" required="">
+              <input type="number" id="carMonth" placeholder="Month (MM)" min="1" max="12" required="">
+              <input type="number" id="carServiceYear" placeholder="Year (YYYY)" min="1990" max="2030" required="">
             </div>
           </div>
 
@@ -705,30 +701,32 @@
   </div>
 
   <!-- SERVICE HISTORY & ADD SERVICE MODAL -->
-  <div class="modal-overlay" id="serviceHistoryModal">
+  <div class="modal-overlay" id="serviceHistoryModal" style="display: none;">
     <div class="modal">
       <div class="modal-header">
         <div class="modal-title" id="historyModalTitle">Car Service History</div>
-        <button class="close-modal" onclick="closeHistoryModal()">&times;</button>
+        <button class="close-modal" onclick="closeHistoryModal()">×</button>
       </div>
       
-      <div class="history-list" id="historyList"></div>
+      <div class="history-list" id="historyList">
+        <!-- Service logs rendered dynamically -->
+      </div>
 
       <div class="section-title">Log New Service Work</div>
       <form id="addServiceForm" onsubmit="saveServiceRecord(event)">
-        <input type="hidden" id="activeCarId" />
+        <input type="hidden" id="activeCarId">
         <div class="form-grid">
           <div class="form-group">
             <label>Service Date</label>
-            <input type="date" id="serviceDate" required />
+            <input type="date" id="serviceDate" required="">
           </div>
           <div class="form-group">
             <label>Kilometers at Service</label>
-            <input type="number" id="serviceKm" placeholder="e.g. 50000" required />
+            <input type="number" id="serviceKm" placeholder="e.g. 50000" required="">
           </div>
           <div class="form-group full-width">
-            <label>Work Performed & Fluid Replaced</label>
-            <textarea id="serviceDesc" placeholder="e.g. Oil change with Castrol Edge 5W-30, air filter, spark plugs..." required></textarea>
+            <label>Work Performed &amp; Fluid Replaced</label>
+            <textarea id="serviceDesc" placeholder="e.g. Oil change with Castrol Edge 5W-30, air filter, spark plugs..." required=""></textarea>
           </div>
         </div>
         <button type="submit" class="btn-submit">+ LOG NEW SERVICE</button>
@@ -736,75 +734,128 @@
     </div>
   </div>
 
+  <!-- SUPABASE LIBRARY -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script>
-    // SUPABASE CONFIGURATION
+    // 1. BASE LOCAL STORAGE DATA (ALWAYS LOADS INSTANTLY)
+    let cars = JSON.parse(localStorage.getItem('tonin_cars_db')) || [];
+
+    // 2. SAFE SUPABASE CONNECTION (DOES NOT BLOCK IF OFFLINE OR BLOCKED)
     const SUPABASE_URL = "https://wumnnvnjmfcydxycyyof.supabase.co";
     const SUPABASE_KEY = "sb_publishable_XTYZ8R18Z3gjRdMG9qb6gQ_JAWnkAEl";
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    let supabaseClient = null;
 
-    let cars = [];
+    function getSupabase() {
+      if (supabaseClient) return supabaseClient;
+      if (window.supabase && typeof window.supabase.createClient === 'function') {
+        try {
+          supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+          return supabaseClient;
+        } catch (err) {
+          console.warn("Supabase init error:", err);
+        }
+      }
+      return null;
+    }
 
+    // 3. MODAL CONTROLS (GARANTEED WORKING)
+    function openAddCarModal() {
+      const modal = document.getElementById('addCarModal');
+      if (modal) {
+        const now = new Date();
+        const d = document.getElementById('carDay');
+        const m = document.getElementById('carMonth');
+        const y = document.getElementById('carServiceYear');
+        if (d) d.value = String(now.getDate()).padStart(2, '0');
+        if (m) m.value = String(now.getMonth() + 1).padStart(2, '0');
+        if (y) y.value = now.getFullYear();
+        modal.style.display = 'flex';
+      }
+    }
+
+    function closeAddCarModal() {
+      const modal = document.getElementById('addCarModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function closeHistoryModal() {
+      const modal = document.getElementById('serviceHistoryModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    // 4. INITIALIZE PAGE
     document.addEventListener('DOMContentLoaded', () => {
-      loadCarsFromSupabase();
-      document.getElementById('serviceDate').valueAsDate = new Date();
+      updateBrandFilterDropdown();
+      renderCars(cars);
+
+      const sDate = document.getElementById('serviceDate');
+      if (sDate) sDate.valueAsDate = new Date();
 
       document.addEventListener('click', (e) => {
         if (!e.target.closest('.search-wrapper')) {
-          document.getElementById('suggestionsBox').style.display = 'none';
+          const box = document.getElementById('suggestionsBox');
+          if (box) box.style.display = 'none';
         }
       });
+
+      // Background cloud sync
+      fetchCloudCars();
     });
 
-    // FETCH ALL CARS FROM SUPABASE
-    async function loadCarsFromSupabase() {
-      const { data, error } = await supabase
-        .from('cars')
-        .select('*')
-        .order('id', { ascending: false });
+    // 5. CLOUD FETCH IN BACKGROUND
+    async function fetchCloudCars() {
+      const client = getSupabase();
+      if (!client) return;
 
-      if (error) {
-        console.error("Error fetching cars:", error.message);
-        document.getElementById('carsGrid').innerHTML = `
-          <div class="empty-state">
-            <h3>Error loading database</h3>
-            <p>${error.message}</p>
-          </div>
-        `;
-        return;
-      }
+      try {
+        const { data, error } = await client
+          .from('cars')
+          .select('*')
+          .order('id', { ascending: false });
 
-      cars = data.map(dbRow => {
-        let fullCar = {};
-        try {
-          if (dbRow.price && dbRow.price.startsWith('{')) {
-            fullCar = JSON.parse(dbRow.price);
-          }
-        } catch (e) {
-          console.error("JSON parse error:", e);
+        if (!error && data && data.length > 0) {
+          cars = data.map(row => {
+            let parsed = {};
+            try {
+              if (row.price && typeof row.price === 'string' && row.price.trim().startsWith('{')) {
+                parsed = JSON.parse(row.price);
+              }
+            } catch (e) {}
+
+            return {
+              id: row.id,
+              make: parsed.make || 'Vehicle',
+              model: parsed.model || '',
+              year: parsed.year || '2022',
+              plate: row.plate || parsed.plate || 'N/A',
+              vin: parsed.vin || 'N/A',
+              engine: row.engine || parsed.engine || 'N/A',
+              kw: parsed.kw || 'N/A',
+              km: parsed.km || '0',
+              notes: parsed.notes || 'No specific notes recorded.',
+              initialServiceDate: parsed.initialServiceDate || '01/01/2026',
+              initialServiceYear: parsed.initialServiceYear || '2026',
+              serviceHistory: parsed.serviceHistory || [
+                {
+                  date: parsed.initialServiceDate || '01/01/2026',
+                  km: parsed.km || '0',
+                  desc: "Initial vehicle registration service."
+                }
+              ]
+            };
+          });
+
+          saveToStorage();
+          updateBrandFilterDropdown();
+          filterCars();
         }
-
-        return {
-          id: dbRow.id,
-          make: fullCar.make || 'Vehicle',
-          model: fullCar.model || '',
-          year: fullCar.year || '2022',
-          plate: dbRow.plate || fullCar.plate || 'N/A',
-          vin: fullCar.vin || 'N/A',
-          engine: dbRow.engine || fullCar.engine || 'N/A',
-          kw: fullCar.kw || 'N/A',
-          km: fullCar.km || '0',
-          notes: fullCar.notes || 'No notes.',
-          initialServiceDate: fullCar.initialServiceDate || '01/01/2026',
-          initialServiceYear: fullCar.initialServiceYear || '2026',
-          serviceHistory: fullCar.serviceHistory || []
-        };
-      });
-
-      updateBrandFilterDropdown();
-      filterCars();
+      } catch (err) {
+        console.warn("Cloud fetch skipped:", err);
+      }
     }
 
-    // SAVE NEW CAR TO SUPABASE
+    // 6. SAVE CAR (INSTANT LOCAL + BACKGROUND CLOUD SYNC)
     async function saveCar(e) {
       e.preventDefault();
 
@@ -813,7 +864,8 @@
       const year = document.getElementById('carServiceYear').value;
       const formattedDate = `${day}/${month}/${year}`;
 
-      const carData = {
+      const newCar = {
+        id: Date.now().toString(),
         make: document.getElementById('carMake').value.trim(),
         model: document.getElementById('carModel').value.trim(),
         year: document.getElementById('carYear').value,
@@ -834,42 +886,59 @@
         ]
       };
 
-      const { error } = await supabase
-        .from('cars')
-        .insert([{
-          plate: carData.plate,
-          engine: carData.engine,
-          price: JSON.stringify(carData)
-        }]);
+      // 1. Instant local update
+      cars.push(newCar);
+      saveToStorage();
+      updateBrandFilterDropdown();
+      filterCars();
 
-      if (error) {
-        alert("Error saving vehicle to Supabase: " + error.message);
-        return;
-      }
-
-      await loadCarsFromSupabase();
       document.getElementById('addCarForm').reset();
       closeAddCarModal();
-    }
 
-    // DELETE CAR FROM SUPABASE
-    async function deleteCar(carId) {
-      if (confirm('Are you sure you want to remove this car and all history?')) {
-        const { error } = await supabase
-          .from('cars')
-          .delete()
-          .eq('id', carId);
+      // 2. Cloud sync
+      const client = getSupabase();
+      if (client) {
+        try {
+          const { data, error } = await client
+            .from('cars')
+            .insert([{
+              plate: newCar.plate,
+              engine: newCar.engine,
+              price: JSON.stringify(newCar)
+            }])
+            .select();
 
-        if (error) {
-          alert("Error deleting car: " + error.message);
-          return;
+          if (!error && data && data[0]) {
+            newCar.id = data[0].id;
+            saveToStorage();
+            filterCars();
+          }
+        } catch (err) {
+          console.warn("Cloud save skipped:", err);
         }
-
-        await loadCarsFromSupabase();
       }
     }
 
-    // LOG NEW SERVICE RECORD IN SUPABASE
+    // 7. DELETE CAR
+    async function deleteCar(carId) {
+      if (confirm('Are you sure you want to remove this car and all history?')) {
+        cars = cars.filter(car => String(car.id) !== String(carId));
+        saveToStorage();
+        updateBrandFilterDropdown();
+        filterCars();
+
+        const client = getSupabase();
+        if (client) {
+          try {
+            await client.from('cars').delete().eq('id', carId);
+          } catch (err) {
+            console.warn("Cloud delete skipped:", err);
+          }
+        }
+      }
+    }
+
+    // 8. LOG SERVICE RECORD
     async function saveServiceRecord(e) {
       e.preventDefault();
       const carId = document.getElementById('activeCarId').value;
@@ -895,45 +964,46 @@
           car.km = newRecord.km;
         }
 
-        const { error } = await supabase
-          .from('cars')
-          .update({
-            price: JSON.stringify(car)
-          })
-          .eq('id', carId);
-
-        if (error) {
-          alert("Error updating service history: " + error.message);
-          return;
-        }
-
+        saveToStorage();
         renderServiceHistory(car);
         filterCars();
         document.getElementById('serviceDesc').value = '';
         document.getElementById('serviceKm').value = '';
+
+        const client = getSupabase();
+        if (client) {
+          try {
+            await client
+              .from('cars')
+              .update({ price: JSON.stringify(car) })
+              .eq('id', carId);
+          } catch (err) {
+            console.warn("Cloud service log update skipped:", err);
+          }
+        }
       }
     }
 
-    // GET LAST SERVICED YEAR
+    // 9. HELPER FUNCTIONS
     function getLastServicedYear(car) {
       if (car.serviceHistory && car.serviceHistory.length > 0) {
         const lastEntry = car.serviceHistory[car.serviceHistory.length - 1];
-        if (lastEntry.date) {
+        if (lastEntry && lastEntry.date) {
           const parts = lastEntry.date.split('/');
           if (parts.length === 3) return parts[2];
           const dashParts = lastEntry.date.split('-');
           if (dashParts.length === 3) return dashParts[0];
         }
       }
-      return car.initialServiceYear || car.year;
+      return car.initialServiceYear || car.year || '2026';
     }
 
-    // AUTO-POPULATE DYNAMIC BRAND FILTER DROPDOWN
     function updateBrandFilterDropdown() {
       const brandFilter = document.getElementById('brandFilter');
+      if (!brandFilter) return;
       const selectedValue = brandFilter.value;
       
-      const uniqueMakes = [...new Set(cars.map(c => c.make.toUpperCase()))].sort();
+      const uniqueMakes = [...new Set(cars.map(c => (c.make || 'VEHICLE').toUpperCase()))].sort();
 
       brandFilter.innerHTML = '<option value="ALL">All Makes</option>';
       uniqueMakes.forEach(make => {
@@ -948,10 +1018,10 @@
       }
     }
 
-    // GOOGLE-STYLE AUTOCOMPLETE SEARCH FOR VIN & PLATE
     function handleSearchInput() {
       const query = document.getElementById('searchInput').value.trim().toUpperCase();
       const box = document.getElementById('suggestionsBox');
+      if (!box) return;
       box.innerHTML = '';
 
       if (query.length < 1) {
@@ -960,7 +1030,10 @@
         return;
       }
 
-      const matches = cars.filter(c => c.vin.includes(query) || c.plate.includes(query));
+      const matches = cars.filter(c => 
+        (c.vin && c.vin.toUpperCase().includes(query)) || 
+        (c.plate && c.plate.toUpperCase().includes(query))
+      );
 
       if (matches.length > 0) {
         matches.forEach(car => {
@@ -982,23 +1055,28 @@
       filterCars();
     }
 
-    // FILTER CARS BY BRAND & SEARCH
     function filterCars() {
-      const selectedBrand = document.getElementById('brandFilter').value;
-      const searchQuery = document.getElementById('searchInput').value.trim().toUpperCase();
+      const brandElem = document.getElementById('brandFilter');
+      const searchElem = document.getElementById('searchInput');
+      const selectedBrand = brandElem ? brandElem.value : 'ALL';
+      const searchQuery = searchElem ? searchElem.value.trim().toUpperCase() : '';
 
       const filtered = cars.filter(car => {
-        const matchesBrand = (selectedBrand === 'ALL') || (car.make.toUpperCase() === selectedBrand);
-        const matchesSearch = car.plate.includes(searchQuery) || car.vin.includes(searchQuery);
+        const carMake = (car.make || '').toUpperCase();
+        const carPlate = (car.plate || '').toUpperCase();
+        const carVin = (car.vin || '').toUpperCase();
+
+        const matchesBrand = (selectedBrand === 'ALL') || (carMake === selectedBrand);
+        const matchesSearch = carPlate.includes(searchQuery) || carVin.includes(searchQuery);
         return matchesBrand && matchesSearch;
       });
 
       renderCars(filtered);
     }
 
-    // RENDER CAR CARDS
     function renderCars(carsToRender) {
       const grid = document.getElementById('carsGrid');
+      if (!grid) return;
       grid.innerHTML = '';
 
       if (carsToRender.length === 0) {
@@ -1031,7 +1109,7 @@
               <div class="spec-item">VIN <span>${car.vin}</span></div>
               <div class="spec-item">Engine <span>${car.engine}</span></div>
               <div class="spec-item">Power <span>${car.kw} kW</span></div>
-              <div class="spec-item">Mileage <span>${Number(car.km).toLocaleString()} km</span></div>
+              <div class="spec-item">Mileage <span>${Number(car.km || 0).toLocaleString()} km</span></div>
             </div>
 
             <div class="notes-preview">
@@ -1041,7 +1119,7 @@
 
           <div class="card-actions">
             <button class="btn-action btn-history" onclick="openHistoryModal('${car.id}')">
-              HISTORY (${car.serviceHistory.length})
+              HISTORY (${(car.serviceHistory || []).length})
             </button>
             <button class="btn-action btn-add-service-direct" onclick="openDirectAddService('${car.id}')">
               + ADD SERVICE
@@ -1053,7 +1131,6 @@
       });
     }
 
-    // OPEN HISTORY MODAL
     function openHistoryModal(carId) {
       const car = cars.find(c => String(c.id) === String(carId));
       if (!car) return;
@@ -1068,27 +1145,30 @@
     function openDirectAddService(carId) {
       openHistoryModal(carId);
       setTimeout(() => {
-        document.getElementById('serviceKm').focus();
+        const elem = document.getElementById('serviceKm');
+        if (elem) elem.focus();
       }, 100);
     }
 
     function renderServiceHistory(car) {
       const historyList = document.getElementById('historyList');
+      if (!historyList) return;
       historyList.innerHTML = '';
 
-      if (car.serviceHistory.length === 0) {
+      const history = car.serviceHistory || [];
+      if (history.length === 0) {
         historyList.innerHTML = '<p style="color: var(--text-muted); font-size: 0.9rem;">No service history logged yet.</p>';
         return;
       }
 
-      const sorted = [...car.serviceHistory].reverse();
+      const sorted = [...history].reverse();
       sorted.forEach(item => {
         const div = document.createElement('div');
         div.className = 'history-item';
         div.innerHTML = `
           <div class="history-item-header">
             <span>DATE: ${item.date}</span>
-            <span>MILEAGE: ${Number(item.km).toLocaleString()} KM</span>
+            <span>MILEAGE: ${Number(item.km || 0).toLocaleString()} KM</span>
           </div>
           <div class="history-item-desc">${item.desc}</div>
         `;
@@ -1096,23 +1176,10 @@
       });
     }
 
-    // MODAL CONTROLS
-    function openAddCarModal() {
-      const now = new Date();
-      document.getElementById('carDay').value = String(now.getDate()).padStart(2, '0');
-      document.getElementById('carMonth').value = String(now.getMonth() + 1).padStart(2, '0');
-      document.getElementById('carServiceYear').value = now.getFullYear();
-
-      document.getElementById('addCarModal').style.display = 'flex';
-    }
-
-    function closeAddCarModal() {
-      document.getElementById('addCarModal').style.display = 'none';
-    }
-
-    function closeHistoryModal() {
-      document.getElementById('serviceHistoryModal').style.display = 'none';
+    function saveToStorage() {
+      localStorage.setItem('tonin_cars_db', JSON.stringify(cars));
     }
   </script>
+
 </body>
 </html>
