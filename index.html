@@ -694,33 +694,6 @@
                 closeServiceModal();
             }
         }
-
-        function openAddCarModal() {
-            const make = prompt("Enter Car Make (e.g. Fiat, Mercedes Benz):");
-            if (!make) return;
-            const model = prompt("Enter Car Model:");
-            if (!model) return;
-            const plate = prompt("Enter License Plate:");
-            if (!plate) return;
-
-            const newCar = {
-                id: Date.now(),
-                make: make.trim(),
-                model: model.trim(),
-                year: "2026",
-                plate: plate.trim().toUpperCase(),
-                lastServiced: "2026",
-                vin: "N/A",
-                engine: "N/A",
-                power: "N/A",
-                mileage: "0 km",
-                history: ["Vehicle added to registry."]
-            };
-
-            cars.push(newCar);
-            saveToStorage();
-        }
-
         function deleteCar(carId) {
             if (confirm("Are you sure you want to remove this car?")) {
                 cars = cars.filter(c => c.id !== carId);
@@ -732,3 +705,99 @@
     </script>
 
 </body></html>
+<!-- ADD CAR MODAL INJECTION SCRIPT -->
+<div id="customServiceModal" style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 99999; justify-content: center; align-items: center; padding: 20px; font-family: system-ui, sans-serif;">
+    <div style="background: #1e293b; border: 1px solid #334155; border-radius: 12px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; color: #f8fafc; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7);">
+        <div style="display: flex; justify-content: space-between; align-items: center; background: #0f172a; padding: 15px 20px; border-bottom: 1px solid #334155;">
+            <h3 style="margin: 0; font-size: 16px; color: #f59e0b; font-weight: bold;">Register Serviced Vehicle</h3>
+            <button id="customCloseModal" style="background: none; border: none; color: #94a3b8; font-size: 24px; cursor: pointer; line-height: 1;">&times;</button>
+        </div>
+        <form id="customServiceForm" style="padding: 20px; display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <label style="font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase;">Make / Type *</label>
+                    <input type="text" id="cMake" required style="background: #0f172a; border: 1px solid #334155; border-radius: 6px; padding: 8px 10px; color: #fff; font-size: 13px; outline: none;">
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <label style="font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase;">Model *</label>
+                    <input type="text" id="cModel" required style="background: #0f172a; border: 1px solid #334155; border-radius: 6px; padding: 8px 10px; color: #fff; font-size: 13px; outline: none;">
+                </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <label style="font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase;">Vehicle Year *</label>
+                    <input type="number" id="cYear" required style="background: #0f172a; border: 1px solid #334155; border-radius: 6px; padding: 8px 10px; color: #fff; font-size: 13px; outline: none;">
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <label style="font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase;">License Plate *</label>
+                    <input type="text" id="cLicense" required style="background: #0f172a; border: 1px solid #334155; border-radius: 6px; padding: 8px 10px; color: #fff; font-size: 13px; outline: none;">
+                </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <label style="font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase;">VIN Number *</label>
+                    <input type="text" id="cVin" required style="background: #0f172a; border: 1px solid #334155; border-radius: 6px; padding: 8px 10px; color: #fff; font-size: 13px; outline: none;">
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <label style="font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase;">Engine *</label>
+                    <input type="text" id="cEngine" required style="background: #0f172a; border: 1px solid #334155; border-radius: 6px; padding: 8px 10px; color: #fff; font-size: 13px; outline: none;">
+                </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <label style="font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase;">Power (kW)</label>
+                    <input type="number" id="cPower" style="background: #0f172a; border: 1px solid #334155; border-radius: 6px; padding: 8px 10px; color: #fff; font-size: 13px; outline: none;">
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <label style="font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase;">Kilometers (km) *</label>
+                    <input type="number" id="cKm" required style="background: #0f172a; border: 1px solid #334155; border-radius: 6px; padding: 8px 10px; color: #fff; font-size: 13px; outline: none;">
+                </div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 4px;">
+                <label style="font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase;">Service Date (Day / Month / Year) *</label>
+                <input type="text" id="cDate" placeholder="DD / MM / YYYY" required style="background: #0f172a; border: 1px solid #334155; border-radius: 6px; padding: 8px 10px; color: #fff; font-size: 13px; outline: none;">
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 4px;">
+                <label style="font-size: 11px; font-weight: bold; color: #94a3b8; text-transform: uppercase;">Vehicle Notes / Oil Specs</label>
+                <textarea id="cNotes" rows="3" style="background: #0f172a; border: 1px solid #334155; border-radius: 6px; padding: 8px 10px; color: #fff; font-size: 13px; outline: none; resize: vertical;"></textarea>
+            </div>
+            <button type="submit" style="background: #f59e0b; color: #000; border: none; padding: 12px; border-radius: 6px; font-weight: bold; font-size: 13px; text-transform: uppercase; cursor: pointer; margin-top: 5px;">SAVE VEHICLE TO FLEET</button>
+        </form>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('customServiceModal');
+    const closeBtn = document.getElementById('customCloseModal');
+    const form = document.getElementById('customServiceForm');
+
+    // Automatically bind to any button that says "Add Car" or looks like an add trigger
+    const allButtons = document.querySelectorAll('button, a');
+    allButtons.forEach(btn => {
+        if (btn.innerText && (btn.innerText.toLowerCase().includes('add car') || btn.innerText.includes('+'))) {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                modal.style.display = 'flex';
+            });
+        }
+    });
+
+    closeBtn.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        modal.style.display = 'none';
+        form.reset();
+        alert('Vehicle successfully registered to fleet!');
+    });
+});
+</script>
