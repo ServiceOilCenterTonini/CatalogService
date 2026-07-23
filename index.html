@@ -8,6 +8,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
   
+  <!-- SUPABASE LIBRARY -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <style>
     :root {
       --bg-dark: #090b0e;
@@ -37,7 +40,6 @@
       min-height: 100vh;
       display: flex;
       flex-direction: column;
-      /* EXCLUSIVE GARAGE BACKGROUND: GRAY WALLS, LED LIGHTING, RED LIFT & BMW M5 CS */
       background-image: 
         linear-gradient(180deg, rgba(9, 11, 14, 0.82) 0%, rgba(9, 11, 14, 0.93) 100%),
         url('https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=2000&q=80');
@@ -186,7 +188,6 @@
       gap: 10px;
     }
 
-    /* GOOGLE-LIKE AUTOCOMPLETE SEARCH WRAPPER */
     .search-wrapper {
       position: relative;
       width: 300px;
@@ -209,7 +210,6 @@
       box-shadow: 0 0 10px var(--accent-gold-glow);
     }
 
-    /* AUTOCOMPLETE DROPDOWN */
     .suggestions-dropdown {
       position: absolute;
       top: 105%;
@@ -238,7 +238,6 @@
       color: var(--accent-gold);
     }
 
-    /* MAIN CONTENT AREA */
     main {
       padding: 20px 5% 60px 5%;
       flex: 1;
@@ -269,7 +268,6 @@
       gap: 25px;
     }
 
-    /* CAR CARD */
     .car-card {
       background: var(--bg-card);
       backdrop-filter: blur(10px);
@@ -446,7 +444,6 @@
       grid-column: 1 / -1;
     }
 
-    /* MODAL STYLES */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -559,7 +556,6 @@
 
     .btn-submit:hover { opacity: 0.9; }
 
-    /* SERVICE HISTORY LIST */
     .history-list {
       display: flex;
       flex-direction: column;
@@ -615,12 +611,10 @@
 
     <!-- CONTROLS BAR -->
     <div class="controls-bar">
-      <!-- TOP LEFT: ADD CAR BUTTON -->
       <button class="btn-add-car" onclick="openAddCarModal()">
         + ADD CAR
       </button>
 
-      <!-- TOP MIDDLE: DYNAMIC BRAND SORT FILTER -->
       <div class="filter-container">
         <label for="brandFilter">Sort Brand:</label>
         <select id="brandFilter" onchange="filterCars()">
@@ -628,7 +622,6 @@
         </select>
       </div>
 
-      <!-- TOP RIGHT: GOOGLE-LIKE AUTOCOMPLETE SEARCH -->
       <div class="search-wrapper">
         <input 
           type="text" 
@@ -646,7 +639,7 @@
   <main>
     <div class="section-title">Serviced Fleet Registry</div>
     <div class="cars-grid" id="carsGrid">
-      <!-- Dynamic Car Cards -->
+      <div class="empty-state">Loading vehicles from database...</div>
     </div>
   </main>
 
@@ -692,7 +685,6 @@
             <input type="number" id="carKm" placeholder="e.g. 42000" required />
           </div>
 
-          <!-- SERVICE DATE FIELDS (DAY / MONTH / YEAR) -->
           <div class="form-group full-width">
             <label>Service Date (Day / Month / Year) *</label>
             <div class="date-inputs-group">
@@ -720,9 +712,7 @@
         <button class="close-modal" onclick="closeHistoryModal()">&times;</button>
       </div>
       
-      <div class="history-list" id="historyList">
-        <!-- Service logs rendered dynamically -->
-      </div>
+      <div class="history-list" id="historyList"></div>
 
       <div class="section-title">Log New Service Work</div>
       <form id="addServiceForm" onsubmit="saveServiceRecord(event)">
@@ -747,15 +737,17 @@
   </div>
 
   <script>
-    // INITIALIZE LOCAL STORAGE
-    let cars = JSON.parse(localStorage.getItem('tonin_cars_db')) || [];
+    // SUPABASE CONFIGURATION
+    const SUPABASE_URL = "https://wumnnvnjmfcydxycyyof.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_XTYZ8R18Z3gjRdMG9qb6gQ_JAWnkAEl";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let cars = [];
 
     document.addEventListener('DOMContentLoaded', () => {
-      updateBrandFilterDropdown();
-      renderCars(cars);
+      loadCarsFromSupabase();
       document.getElementById('serviceDate').valueAsDate = new Date();
 
-      // Close autocomplete dropdown when clicking outside
       document.addEventListener('click', (e) => {
         if (!e.target.closest('.search-wrapper')) {
           document.getElementById('suggestionsBox').style.display = 'none';
@@ -763,8 +755,57 @@
       });
     });
 
-    // SAVE NEW CAR
-    function saveCar(e) {
+    // FETCH ALL CARS FROM SUPABASE
+    async function loadCarsFromSupabase() {
+      const { data, error } = await supabase
+        .from('cars')
+        .select('*')
+        .order('id', { ascending: false });
+
+      if (error) {
+        console.error("Error fetching cars:", error.message);
+        document.getElementById('carsGrid').innerHTML = `
+          <div class="empty-state">
+            <h3>Error loading database</h3>
+            <p>${error.message}</p>
+          </div>
+        `;
+        return;
+      }
+
+      cars = data.map(dbRow => {
+        let fullCar = {};
+        try {
+          if (dbRow.price && dbRow.price.startsWith('{')) {
+            fullCar = JSON.parse(dbRow.price);
+          }
+        } catch (e) {
+          console.error("JSON parse error:", e);
+        }
+
+        return {
+          id: dbRow.id,
+          make: fullCar.make || 'Vehicle',
+          model: fullCar.model || '',
+          year: fullCar.year || '2022',
+          plate: dbRow.plate || fullCar.plate || 'N/A',
+          vin: fullCar.vin || 'N/A',
+          engine: dbRow.engine || fullCar.engine || 'N/A',
+          kw: fullCar.kw || 'N/A',
+          km: fullCar.km || '0',
+          notes: fullCar.notes || 'No notes.',
+          initialServiceDate: fullCar.initialServiceDate || '01/01/2026',
+          initialServiceYear: fullCar.initialServiceYear || '2026',
+          serviceHistory: fullCar.serviceHistory || []
+        };
+      });
+
+      updateBrandFilterDropdown();
+      filterCars();
+    }
+
+    // SAVE NEW CAR TO SUPABASE
+    async function saveCar(e) {
       e.preventDefault();
 
       const day = String(document.getElementById('carDay').value).padStart(2, '0');
@@ -772,8 +813,7 @@
       const year = document.getElementById('carServiceYear').value;
       const formattedDate = `${day}/${month}/${year}`;
 
-      const newCar = {
-        id: Date.now().toString(),
+      const carData = {
         make: document.getElementById('carMake').value.trim(),
         model: document.getElementById('carModel').value.trim(),
         year: document.getElementById('carYear').value,
@@ -794,38 +834,98 @@
         ]
       };
 
-      cars.push(newCar);
-      saveToStorage();
-      
-      updateBrandFilterDropdown();
-      filterCars();
-      
+      const { error } = await supabase
+        .from('cars')
+        .insert([{
+          plate: carData.plate,
+          engine: carData.engine,
+          price: JSON.stringify(carData)
+        }]);
+
+      if (error) {
+        alert("Error saving vehicle to Supabase: " + error.message);
+        return;
+      }
+
+      await loadCarsFromSupabase();
       document.getElementById('addCarForm').reset();
       closeAddCarModal();
     }
 
-    // GET LAST SERVICED YEAR FOR DISPLAY ON CARD FACE
+    // DELETE CAR FROM SUPABASE
+    async function deleteCar(carId) {
+      if (confirm('Are you sure you want to remove this car and all history?')) {
+        const { error } = await supabase
+          .from('cars')
+          .delete()
+          .eq('id', carId);
+
+        if (error) {
+          alert("Error deleting car: " + error.message);
+          return;
+        }
+
+        await loadCarsFromSupabase();
+      }
+    }
+
+    // LOG NEW SERVICE RECORD IN SUPABASE
+    async function saveServiceRecord(e) {
+      e.preventDefault();
+      const carId = document.getElementById('activeCarId').value;
+      const car = cars.find(c => String(c.id) === String(carId));
+
+      if (car) {
+        const rawDate = document.getElementById('serviceDate').value;
+        const d = new Date(rawDate);
+        const day = String(d.getDate()).padStart(2, '0');
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const year = d.getFullYear();
+        const formattedDate = `${day}/${month}/${year}`;
+
+        const newRecord = {
+          date: formattedDate,
+          km: document.getElementById('serviceKm').value,
+          desc: document.getElementById('serviceDesc').value.trim()
+        };
+
+        car.serviceHistory.push(newRecord);
+
+        if (Number(newRecord.km) > Number(car.km)) {
+          car.km = newRecord.km;
+        }
+
+        const { error } = await supabase
+          .from('cars')
+          .update({
+            price: JSON.stringify(car)
+          })
+          .eq('id', carId);
+
+        if (error) {
+          alert("Error updating service history: " + error.message);
+          return;
+        }
+
+        renderServiceHistory(car);
+        filterCars();
+        document.getElementById('serviceDesc').value = '';
+        document.getElementById('serviceKm').value = '';
+      }
+    }
+
+    // GET LAST SERVICED YEAR
     function getLastServicedYear(car) {
       if (car.serviceHistory && car.serviceHistory.length > 0) {
         const lastEntry = car.serviceHistory[car.serviceHistory.length - 1];
         if (lastEntry.date) {
           const parts = lastEntry.date.split('/');
-          if (parts.length === 3) return parts[2]; // Return YYYY from DD/MM/YYYY
+          if (parts.length === 3) return parts[2];
           const dashParts = lastEntry.date.split('-');
-          if (dashParts.length === 3) return dashParts[0]; // Return YYYY from YYYY-MM-DD
+          if (dashParts.length === 3) return dashParts[0];
         }
       }
       return car.initialServiceYear || car.year;
-    }
-
-    // DELETE CAR
-    function deleteCar(carId) {
-      if (confirm('Are you sure you want to remove this car and all history?')) {
-        cars = cars.filter(car => car.id !== carId);
-        saveToStorage();
-        updateBrandFilterDropdown();
-        filterCars();
-      }
     }
 
     // AUTO-POPULATE DYNAMIC BRAND FILTER DROPDOWN
@@ -860,7 +960,6 @@
         return;
       }
 
-      // Find matching cars by VIN or License Plate
       const matches = cars.filter(c => c.vin.includes(query) || c.plate.includes(query));
 
       if (matches.length > 0) {
@@ -897,7 +996,7 @@
       renderCars(filtered);
     }
 
-    // RENDER CAR CARDS ON FLEET REGISTRY
+    // RENDER CAR CARDS
     function renderCars(carsToRender) {
       const grid = document.getElementById('carsGrid');
       grid.innerHTML = '';
@@ -956,7 +1055,7 @@
 
     // OPEN HISTORY MODAL
     function openHistoryModal(carId) {
-      const car = cars.find(c => c.id === carId);
+      const car = cars.find(c => String(c.id) === String(carId));
       if (!car) return;
 
       document.getElementById('activeCarId').value = car.id;
@@ -966,7 +1065,6 @@
       document.getElementById('serviceHistoryModal').style.display = 'flex';
     }
 
-    // DIRECT ADD SERVICE BUTTON (Opens modal focused on adding a record)
     function openDirectAddService(carId) {
       openHistoryModal(carId);
       setTimeout(() => {
@@ -998,45 +1096,8 @@
       });
     }
 
-    // LOG NEW SERVICE RECORD
-    function saveServiceRecord(e) {
-      e.preventDefault();
-      const carId = document.getElementById('activeCarId').value;
-      const car = cars.find(c => c.id === carId);
-
-      if (car) {
-        const rawDate = document.getElementById('serviceDate').value;
-        // Format YYYY-MM-DD to DD/MM/YYYY
-        const d = new Date(rawDate);
-        const day = String(d.getDate()).padStart(2, '0');
-        const month = String(d.getMonth() + 1).padStart(2, '0');
-        const year = d.getFullYear();
-        const formattedDate = `${day}/${month}/${year}`;
-
-        const newRecord = {
-          date: formattedDate,
-          km: document.getElementById('serviceKm').value,
-          desc: document.getElementById('serviceDesc').value.trim()
-        };
-
-        car.serviceHistory.push(newRecord);
-
-        // Auto-update car's current mileage if new service is higher
-        if (Number(newRecord.km) > Number(car.km)) {
-          car.km = newRecord.km;
-        }
-
-        saveToStorage();
-        renderServiceHistory(car);
-        filterCars(); 
-        document.getElementById('serviceDesc').value = '';
-        document.getElementById('serviceKm').value = '';
-      }
-    }
-
     // MODAL CONTROLS
     function openAddCarModal() {
-      // Set today's date in day/month/year inputs as default
       const now = new Date();
       document.getElementById('carDay').value = String(now.getDate()).padStart(2, '0');
       document.getElementById('carMonth').value = String(now.getMonth() + 1).padStart(2, '0');
@@ -1051,10 +1112,6 @@
 
     function closeHistoryModal() {
       document.getElementById('serviceHistoryModal').style.display = 'none';
-    }
-
-    function saveToStorage() {
-      localStorage.setItem('tonin_cars_db', JSON.stringify(cars));
     }
   </script>
 </body>
